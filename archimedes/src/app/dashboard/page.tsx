@@ -12,10 +12,10 @@ export default function Dashboard() {
       <div className="hidden md:flex h-full">
          <Sidebar agent={agent} />
       </div>
-      {/* Mobile Drawer could go here */}
 
       <main className="flex-1 relative h-full">
-        <Workspace />
+        {/* Pass the agent state to the workspace to trigger visual changes */}
+        <Workspace agentState={agent.state} />
       </main>
     </div>
   );

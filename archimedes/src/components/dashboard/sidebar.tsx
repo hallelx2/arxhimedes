@@ -44,7 +44,7 @@ export function Sidebar({ agent }: SidebarProps) {
             <div
               key={msg.id}
               className={cn(
-                "rounded-lg p-3 text-sm",
+                "rounded-lg p-3 text-sm animate-in fade-in slide-in-from-bottom-2 duration-300",
                 msg.role === "user" ? "bg-primary/10 ml-8 text-primary-foreground border border-primary/20" : "bg-gray-900 mr-8 text-gray-300 border border-gray-800"
               )}
             >
@@ -59,16 +59,16 @@ export function Sidebar({ agent }: SidebarProps) {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="space-y-2 border-l-2 border-dashed border-gray-700 pl-4 py-2"
+                className="space-y-2 border-l-2 border-dashed border-gray-700 pl-4 py-2 bg-gray-900/50 rounded-r-lg"
               >
                 {thoughtStream.map((thought, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="flex items-center gap-2 text-xs text-gray-500 font-mono"
+                    className="flex items-center gap-2 text-xs text-primary font-mono"
                   >
-                    <Cpu className="h-3 w-3" />
+                    <Cpu className="h-3 w-3 animate-pulse" />
                     {thought}
                   </motion.div>
                 ))}
@@ -83,7 +83,7 @@ export function Sidebar({ agent }: SidebarProps) {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="mt-4 p-3 bg-secondary/10 border border-secondary/30 rounded-lg flex items-center gap-3"
+                className="mt-4 p-3 bg-secondary/10 border border-secondary/30 rounded-lg flex items-center gap-3 shadow-lg shadow-secondary/5"
               >
                 <div className="bg-secondary/20 p-2 rounded-full animate-spin">
                   <Activity className="h-4 w-4 text-secondary" />
@@ -99,7 +99,19 @@ export function Sidebar({ agent }: SidebarProps) {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gray-800 bg-gray-950">
+      <div className="p-4 border-t border-gray-800 bg-gray-950 space-y-3">
+        {/* Suggested Prompt Chip */}
+        {messages.length === 1 && state === "idle" && (
+            <button
+              onClick={() => {
+                sendMessage("Generate a pediatric trans-nasal manipulator for pituitary access.");
+              }}
+              className="text-xs text-gray-400 bg-gray-900 hover:bg-gray-800 px-3 py-1.5 rounded-full border border-gray-800 transition-colors w-full text-left truncate"
+            >
+              ✨ Try: &quot;Generate a pediatric trans-nasal manipulator...&quot;
+            </button>
+        )}
+
         <form onSubmit={handleSubmit} className="relative">
           <input
             type="text"
@@ -107,7 +119,7 @@ export function Sidebar({ agent }: SidebarProps) {
             onChange={(e) => setInput(e.target.value)}
             disabled={state !== "idle" && state !== "completed"}
             placeholder="Ask Archimedes..."
-            className="w-full rounded-lg border border-gray-800 bg-gray-900 py-3 pl-4 pr-12 text-sm text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
+            className="w-full rounded-lg border border-gray-800 bg-gray-900 py-3 pl-4 pr-12 text-sm text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50 transition-all"
           />
           <button
             type="submit"
@@ -117,8 +129,8 @@ export function Sidebar({ agent }: SidebarProps) {
             <Send className="h-4 w-4" />
           </button>
         </form>
-        <p className="mt-2 text-center text-xs text-gray-600">
-          Powered by Gemini 3. Context window: 2M tokens.
+        <p className="text-center text-[10px] text-gray-600 uppercase tracking-widest">
+          Gemini 3 • 2M Context • v0.9.4
         </p>
       </div>
     </aside>

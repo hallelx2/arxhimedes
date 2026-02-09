@@ -44,8 +44,12 @@ export function useAgent() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     addThought("Analyzing patient-specific constraints (BMI, Organ Span)...");
 
-    // Simulate Tool Usage based on keywords
-    if (content.toLowerCase().includes("obese") || content.toLowerCase().includes("liver")) {
+    // Check for specific keywords to trigger the detailed simulation
+    const lowerContent = content.toLowerCase();
+    const isObeseLiverScenario = lowerContent.includes("obese") || lowerContent.includes("liver");
+    const isPituitaryScenario = lowerContent.includes("pituitary") || lowerContent.includes("nasal") || lowerContent.includes("pediatric");
+
+    if (isObeseLiverScenario) {
       // Phase 1: Constraint Analysis
       await new Promise((resolve) => setTimeout(resolve, 800));
       setState("executing");
@@ -70,6 +74,28 @@ export function useAgent() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setActiveTool({ name: "AssemblyEngine", status: "completed" });
 
+    } else if (isPituitaryScenario) {
+       // New Golden Path for the user's requested demo
+       await new Promise((resolve) => setTimeout(resolve, 800));
+       setState("executing");
+       setActiveTool({ name: "Micro-Kinematics Solver", status: "active" });
+       addThought("Calculating trans-nasal corridor limits...");
+       await new Promise((resolve) => setTimeout(resolve, 1500));
+       setActiveTool({ name: "Micro-Kinematics Solver", status: "completed" });
+       addThought("Constraint: Max diameter 4mm. Reach: 120mm.");
+
+       await new Promise((resolve) => setTimeout(resolve, 800));
+       setActiveTool({ name: "Bio-Material Selector", status: "active" });
+       addThought("Selecting pediatric-safe flexible polymers...");
+       await new Promise((resolve) => setTimeout(resolve, 1500));
+       setActiveTool({ name: "Bio-Material Selector", status: "completed" });
+
+       await new Promise((resolve) => setTimeout(resolve, 800));
+       setActiveTool({ name: "AssemblyEngine", status: "active" });
+       addThought("Generating snake-like manipulator topology...");
+       await new Promise((resolve) => setTimeout(resolve, 1500));
+       setActiveTool({ name: "AssemblyEngine", status: "completed" });
+
     } else {
        await new Promise((resolve) => setTimeout(resolve, 1000));
        addThought("Generating mechanical proposal...");
@@ -81,8 +107,10 @@ export function useAgent() {
     setActiveTool(null);
 
     let agentResponse = "I've processed your request.";
-    if (content.toLowerCase().includes("obese") || content.toLowerCase().includes("liver")) {
+    if (isObeseLiverScenario) {
         agentResponse = "Design Complete: 'Laparoscopic Arm Model X42'. Optimized for deep abdominal access in high-BMI patients. Features include a telescopic distal link to bypass the enlarged liver span and a high-torque actuator array for retraction stability.";
+    } else if (isPituitaryScenario) {
+        agentResponse = "Design Complete: 'Neuro-Snake V9'. Optimized for pediatric trans-nasal access. The manipulator features a 3.8mm diameter flexible continuum body with shape-sensing fibers to navigate the nasal concha without trauma.";
     } else {
         agentResponse = "I've generated a preliminary robotic arm design based on your constraints. The kinematics are optimized for the specified workspace.";
     }
