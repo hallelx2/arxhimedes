@@ -1,7 +1,7 @@
 "use client";
 
 import Spline from "@splinetool/react-spline";
-import { Grid, MousePointer, Ruler, Save, Sliders, Layers } from "lucide-react";
+import { Grid, MousePointer, Ruler, Save, Sliders, Layers, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,7 @@ export function Workspace() {
             "p-2 rounded-md transition-colors",
             activeTool === "select" ? "bg-primary text-background" : "text-gray-400 hover:bg-gray-800 hover:text-white"
           )}
-          title="Select"
+          title="Select Component"
         >
           <MousePointer className="h-5 w-5" />
         </button>
@@ -35,7 +35,7 @@ export function Workspace() {
             "p-2 rounded-md transition-colors",
             activeTool === "measure" ? "bg-primary text-background" : "text-gray-400 hover:bg-gray-800 hover:text-white"
           )}
-          title="Measure"
+          title="Measure Kinematics"
         >
           <Ruler className="h-5 w-5" />
         </button>
@@ -46,42 +46,55 @@ export function Workspace() {
             "p-2 rounded-md transition-colors",
             showGrid ? "bg-secondary text-white" : "text-gray-400 hover:bg-gray-800 hover:text-white"
           )}
-          title="Toggle Grid"
+          title="Toggle Work Grid"
         >
           <Grid className="h-5 w-5" />
         </button>
          <button
           className="p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
-          title="Layers"
+          title="Component Layers"
         >
           <Layers className="h-5 w-5" />
         </button>
         <button
           className="p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
-          title="Export"
+          title="Export CAD"
         >
           <Save className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Floating Info Panel */}
-      <div className="absolute bottom-4 right-4 z-20 w-64 rounded-lg bg-gray-950/90 p-4 backdrop-blur-md border border-gray-800 shadow-2xl">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Metrics</h3>
-          <Sliders className="h-4 w-4 text-gray-500" />
+      {/* Floating Metrics Panel */}
+      <div className="absolute bottom-4 right-4 z-20 w-72 rounded-lg bg-gray-950/90 p-4 backdrop-blur-md border border-gray-800 shadow-2xl">
+        <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-800">
+          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+             <Sliders className="h-3 w-3" /> Mechanical Specs
+          </h3>
+          <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">Optimal</span>
         </div>
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Target Distance</span>
-            <span className="font-mono text-primary">14.2 mm</span>
+        <div className="space-y-3">
+          <div className="flex justify-between text-sm items-center">
+            <span className="text-gray-500">Max Reach</span>
+            <span className="font-mono text-primary font-medium">185.4 mm</span>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Angle</span>
-            <span className="font-mono text-secondary">32.5°</span>
+           {/* Progress bar visual for reach */}
+           <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+             <div className="h-full bg-primary w-[75%]" />
+           </div>
+
+          <div className="flex justify-between text-sm items-center">
+            <span className="text-gray-500">Payload Cap.</span>
+            <span className="font-mono text-secondary font-medium">4.2 kg</span>
           </div>
-          <div className="flex justify-between text-sm">
-             <span className="text-gray-500">Risk Factor</span>
-             <span className="font-mono text-accent">Low (2%)</span>
+
+          <div className="flex justify-between text-sm items-center">
+             <span className="text-gray-500">Joint DoF</span>
+             <span className="font-mono text-accent font-medium">6 Axis</span>
+          </div>
+
+          <div className="pt-2 mt-2 border-t border-gray-800 flex justify-between text-xs text-gray-400">
+             <span>Material: Ti-6Al-4V</span>
+             <span className="flex items-center hover:text-white cursor-pointer transition-colors">Details <ChevronRight className="h-3 w-3" /></span>
           </div>
         </div>
       </div>

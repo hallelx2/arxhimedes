@@ -21,7 +21,7 @@ export function useAgent() {
     {
       id: "welcome",
       role: "agent",
-      content: "System Online. Patient-0942 Pterygopalatine Access initialized. Awaiting commands.",
+      content: "Archimedes Design Core Online. Ready to synthesize robotic solutions. Please describe the patient parameters and surgical constraints.",
     },
   ]);
   const [thoughtStream, setThoughtStream] = useState<string[]>([]);
@@ -40,30 +40,39 @@ export function useAgent() {
 
     // Simulate Thinking Process
     await new Promise((resolve) => setTimeout(resolve, 800));
-    addThought("Analyzing request intent...");
+    addThought("Parsing surgical requirements...");
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    addThought("Retrieving relevant patient data...");
+    addThought("Analyzing patient-specific constraints (BMI, Organ Span)...");
 
     // Simulate Tool Usage based on keywords
-    if (content.toLowerCase().includes("scan") || content.toLowerCase().includes("anatomy")) {
+    if (content.toLowerCase().includes("obese") || content.toLowerCase().includes("liver")) {
+      // Phase 1: Constraint Analysis
       await new Promise((resolve) => setTimeout(resolve, 800));
       setState("executing");
-      setActiveTool({ name: "AnatomyScanner V3.1", status: "active" });
-      addThought("Activating volumetric scanner...");
+      setActiveTool({ name: "ConstraintSolver V2.1", status: "active" });
+      addThought("Mapping deep cavity access requirements...");
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      setActiveTool({ name: "AnatomyScanner V3.1", status: "completed" });
-      addThought("Scan complete. Vascular anomalies detected.");
-    } else if (content.toLowerCase().includes("risk") || content.toLowerCase().includes("nerve")) {
+      setActiveTool({ name: "ConstraintSolver V2.1", status: "completed" });
+      addThought("Kinematic target defined: +150mm reach required.");
+
+      // Phase 2: Component Generation
       await new Promise((resolve) => setTimeout(resolve, 800));
-      setState("executing");
-      setActiveTool({ name: "RiskAssessor V4.0", status: "active" });
-      addThought("Calculating proximity to critical structures...");
+      setActiveTool({ name: "GenerativeCAD Engine", status: "active" });
+      addThought("Synthesizing high-torque joint linkages...");
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      setActiveTool({ name: "RiskAssessor V4.0", status: "completed" });
-      addThought("High risk alert: Maxillary artery proximity < 3mm.");
+      setActiveTool({ name: "GenerativeCAD Engine", status: "completed" });
+      addThought("Generated Mechanism: Telescopic End-Effector.");
+
+      // Phase 3: Assembly
+       await new Promise((resolve) => setTimeout(resolve, 800));
+      setActiveTool({ name: "AssemblyEngine", status: "active" });
+      addThought("Mating motors and structural shells...");
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setActiveTool({ name: "AssemblyEngine", status: "completed" });
+
     } else {
        await new Promise((resolve) => setTimeout(resolve, 1000));
-       addThought("Generating response...");
+       addThought("Generating mechanical proposal...");
     }
 
     // Final Response
@@ -72,10 +81,10 @@ export function useAgent() {
     setActiveTool(null);
 
     let agentResponse = "I've processed your request.";
-    if (content.toLowerCase().includes("scan")) {
-        agentResponse = "Volumetric scan complete. I've highlighted the pterygopalatine fossa and identified a potential obstruction near the sphenopalatine foramen.";
-    } else if (content.toLowerCase().includes("risk")) {
-        agentResponse = "Risk assessment complete. Caution advised: The maxillary artery is within 2.4mm of the projected trajectory. I recommend a 14.2° approach adjustment.";
+    if (content.toLowerCase().includes("obese") || content.toLowerCase().includes("liver")) {
+        agentResponse = "Design Complete: 'Laparoscopic Arm Model X42'. Optimized for deep abdominal access in high-BMI patients. Features include a telescopic distal link to bypass the enlarged liver span and a high-torque actuator array for retraction stability.";
+    } else {
+        agentResponse = "I've generated a preliminary robotic arm design based on your constraints. The kinematics are optimized for the specified workspace.";
     }
 
     const agentMsg: Message = { id: (Date.now() + 1).toString(), role: "agent", content: agentResponse };
